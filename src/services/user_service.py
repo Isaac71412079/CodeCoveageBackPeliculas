@@ -2,7 +2,7 @@ from flask import jsonify, Response
 from bson.objectid import ObjectId
 from bson import json_util
 from utils.constants import *
-import re
+from utils.helpers import *
 
 # Post User
 def save_user(mongo, request):
@@ -48,28 +48,3 @@ def delete_user_by_id(mongo, id):
     response = jsonify({"message": "User " + id + " Deleted Successfully"})
     response.status_code = 200
     return response
-
-
-# Helpers
-def error(request):
-    message = {
-        "message": "Oops! Something went wrong - " + request.url,
-        "status": ERROR_CODE,
-    }
-    response = jsonify(message)
-    response.status_code = ERROR_CODE
-    return response
-
-
-def get_field(request, field):
-    return request.json.get(field, None)
-
-
-def remove_oid(string):
-    while True:
-        pattern = re.compile('{\s*"\$oid":\s*("[a-z0-9]{1,}")\s*}')
-        match = re.search(pattern, string)
-        if match:
-            string = string.replace(match.group(0), match.group(1))
-        else:
-            return string
