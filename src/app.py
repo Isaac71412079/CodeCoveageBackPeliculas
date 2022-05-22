@@ -2,6 +2,7 @@ from flask import Flask, request, Response
 from flask_pymongo import PyMongo
 from services.user_service import *
 from services.movie_service import *
+from services.category_service import *
 from utils.constants import *
 
 app = Flask(__name__)
@@ -78,7 +79,7 @@ def create_category():
 
 
 @app.route(CATEGORIES_PATH, methods=["GET"])
-def get_category():
+def get_categories():
     response = get_all_categories(mongo)
     response.headers.add("Access-Control-Allow-Origin", "*")
     return response
