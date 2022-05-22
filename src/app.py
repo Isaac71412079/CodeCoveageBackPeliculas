@@ -79,7 +79,7 @@ def create_category():
 
 @app.route(CATEGORIES_PATH, methods=["GET"])
 def get_category():
-    response = get_all_category(mongo)
+    response = get_all_categories(mongo)
     response.headers.add("Access-Control-Allow-Origin", "*")
     return response
 
