@@ -68,6 +68,34 @@ def delete_movie(id):
     response.headers.add("Access-Control-Allow-Origin", "*")
     return response
 
+# CATEGORIES
+
+@app.route(CATEGORIES_PATH, methods=["POST"])
+def create_category():
+    response = save_category(mongo, request)
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    return response
+
+
+@app.route(CATEGORIES_PATH, methods=["GET"])
+def get_category():
+    response = get_all_category(mongo)
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    return response
+
+
+@app.route(CATEGORIES_PATH + ID, methods=["GET"])
+def get_category(id):
+    response = get_category_by_id(mongo, id)
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    return response
+
+
+@app.route(CATEGORIES_PATH + ID, methods=["DELETE"])
+def delete_category(id):
+    response = delete_category_by_id(mongo, id)
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    return response
 
 if __name__ == "__main__":
     app.run(debug=True)
