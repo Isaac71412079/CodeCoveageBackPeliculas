@@ -42,7 +42,19 @@ def save_movie(mongo, request):
 
 # Get All Movies
 def get_all_movies(mongo):
-    movies = mongo.db.movies.find()
+    #movies = mongo.db.movies.find()
+    movies = mongo.db.movies.aggregate([
+        {
+            "$lookup":
+            {
+                "from": "genres",
+                "localField": "genreId",
+                "foreignField": "_id",
+                "as": "genres"
+            }
+        }
+    ])
+    print (movies)
     response = json_util.dumps(movies)
     response = remove_oid(response)
     return Response(response, mimetype="application/json")

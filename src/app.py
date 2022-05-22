@@ -4,8 +4,10 @@ from services.user_service import *
 from services.movie_service import *
 from services.category_service import *
 from utils.constants import *
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 app.config["MONGO_URI"] = DB_URI
 mongo = PyMongo(app)
