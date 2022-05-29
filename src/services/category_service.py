@@ -6,9 +6,14 @@ from utils.helpers import *
 
 # Post Category
 def save_category(mongo, request):
-    name = get_field(request, "name")
-    if name:
-        body = {"name": name}
+    key = get_field(request, "key")
+    value = get_field(request, "value")
+    if key:
+        body = {
+            "key": key, 
+            "value":value, 
+            "text":value
+        }
         _id = mongo.db.genres.insert_one({**body})
         response = jsonify({"_id": str(_id.inserted_id), **body})
         response.status_code = CREATED_CODE
@@ -43,9 +48,12 @@ def delete_category_by_id(mongo, id):
 
 # Update Category by ID
 def update_category_by_id(mongo, request, id):
-    name = get_field(request, "name")
+    key = get_field(request, "key")
+    value = get_field(request, "value")
     body = {
-        "name": name,
+        "key": key, 
+        "value":value, 
+        "text":value
     }
     _id = mongo.db.genres.update_one({"_id": ObjectId(id)}, {"$set": {**body}})
     if _id.modified_count == 1:

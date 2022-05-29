@@ -49,13 +49,12 @@ def get_all_movies(mongo):
                 "$lookup": {
                     "from": "genres",
                     "localField": "genreId",
-                    "foreignField": "_id",
+                    "foreignField": "value",
                     "as": "genres",
                 }
             }
         ]
     )
-    print(movies)
     response = json_util.dumps(movies)
     response = remove_oid(response)
     return Response(response, mimetype="application/json")
