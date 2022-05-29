@@ -48,3 +48,24 @@ def delete_user_by_id(mongo, id):
     response = jsonify({"message": "User " + id + " Deleted Successfully"})
     response.status_code = 200
     return response
+
+
+# Update User by ID
+def update_user_by_id(mongo, request, id):
+    username = get_field(request, "username")
+    email = get_field(request, "email")
+    password = get_field(request, "password")
+    isAdmin = get_field(request, "isAdmin")
+    body = {
+        "username": username,
+        "password": password,
+        "email": email,
+        "isAdmin": isAdmin,
+    }
+    _id = mongo.db.users.update_one({"_id": ObjectId(id)}, {"$set": {**body}})
+    if _id.modified_count == 1:
+        response = jsonify({"_id": id, **body})
+        response.status_code = OK
+        return response
+    else:
+        return error(request)

@@ -12,7 +12,8 @@ CORS(app)
 app.config["MONGO_URI"] = DB_URI
 mongo = PyMongo(app)
 
-
+# USERS
+# POST -> Crear
 @app.route(USERS_PATH, methods=["POST"])
 def create_users():
     response = save_user(mongo, request)
@@ -20,6 +21,7 @@ def create_users():
     return response
 
 
+# GET -> Obtener
 @app.route(USERS_PATH, methods=["GET"])
 def get_users():
     response = get_all_users(mongo)
@@ -27,6 +29,7 @@ def get_users():
     return response
 
 
+# GET -> Obtener by ID
 @app.route(USERS_PATH + ID, methods=["GET"])
 def get_user(id):
     response = get_user_by_id(mongo, id)
@@ -34,6 +37,7 @@ def get_user(id):
     return response
 
 
+# DELETE -> Eliminar by ID
 @app.route(USERS_PATH + ID, methods=["DELETE"])
 def delete_user(id):
     response = delete_user_by_id(mongo, id)
@@ -41,9 +45,15 @@ def delete_user(id):
     return response
 
 
+# PUT -> Actualizar by ID
+@app.route(USERS_PATH + ID, methods=["PUT"])
+def update_user(id):
+    response = update_user_by_id(mongo, request, id)
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    return response
+
+
 # MOVIES
-
-
 @app.route(MOVIES_PATH, methods=["POST"])
 def create_movie():
     response = save_movie(mongo, request)
@@ -71,8 +81,15 @@ def delete_movie(id):
     response.headers.add("Access-Control-Allow-Origin", "*")
     return response
 
-# CATEGORIES
 
+@app.route(MOVIES_PATH + ID, methods=["PUT"])
+def update_movie(id):
+    response = update_movie_by_id(mongo, request, id)
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    return response
+
+
+# CATEGORIES
 @app.route(CATEGORIES_PATH, methods=["POST"])
 def create_category():
     response = save_category(mongo, request)
@@ -99,6 +116,14 @@ def delete_category(id):
     response = delete_category_by_id(mongo, id)
     response.headers.add("Access-Control-Allow-Origin", "*")
     return response
+
+
+@app.route(CATEGORIES_PATH + ID, methods=["PUT"])
+def update_category(id):
+    response = update_category_by_id(mongo, request, id)
+    response.headers.add("Access-Control-Allow-Origin", "*")
+    return response
+
 
 if __name__ == "__main__":
     app.run(debug=True)

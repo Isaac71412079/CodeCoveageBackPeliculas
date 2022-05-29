@@ -42,19 +42,20 @@ def save_movie(mongo, request):
 
 # Get All Movies
 def get_all_movies(mongo):
-    #movies = mongo.db.movies.find()
-    movies = mongo.db.movies.aggregate([
-        {
-            "$lookup":
+    # movies = mongo.db.movies.find()
+    movies = mongo.db.movies.aggregate(
+        [
             {
-                "from": "genres",
-                "localField": "genreId",
-                "foreignField": "_id",
-                "as": "genres"
+                "$lookup": {
+                    "from": "genres",
+                    "localField": "genreId",
+                    "foreignField": "_id",
+                    "as": "genres",
+                }
             }
-        }
-    ])
-    print (movies)
+        ]
+    )
+    print(movies)
     response = json_util.dumps(movies)
     response = remove_oid(response)
     return Response(response, mimetype="application/json")
@@ -74,3 +75,40 @@ def delete_movie_by_id(mongo, id):
     response = jsonify({"message": "Movie " + id + " Deleted Successfully"})
     response.status_code = 200
     return response
+
+
+# Update Movie by ID
+def update_movie_by_id(mongo, request, id):
+    name = get_field(request, "name")
+    year = get_field(request, "year")
+    imageBG = get_field(request, "imageBG")
+    imageCard = get_field(request, "imageCard")
+    video = get_field(request, "video")
+    duration = get_field(request, "duration")
+    genreId = get_field(request, "genreId")
+    sinopsis = get_field(request, "sinopsis")
+    director = get_field(request, "director")
+    idioms = get_field(request, "idioms")
+    actors = get_field(request, "actors")
+
+    body = {
+        "name": name,
+        "year": year,
+        "imageBG": imageBG,
+        "imageCard": imageCard,
+        "video": video,
+        "duration": duration,
+        "genreId": genreId,
+        "sinopsis": sinopsis,
+        "director": director,
+        "idioms": idioms,
+        "actors": actors,
+    }
+
+    _id = mongo.db.movies.update_one({"_id": ObjectId(id)}, {"$set": {**body}})
+    if _id.modified_count == 1:
+        response = jsonify({"_id": id, **body})
+        response.status_code = OK
+        return response
+    else:
+        return error(request)

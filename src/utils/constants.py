@@ -16,3 +16,4 @@ CATEGORIES_PATH = API + V1 + "/categories"
 # Codes
 ERROR_CODE = 404
 CREATED_CODE = 201
+OK = 200
