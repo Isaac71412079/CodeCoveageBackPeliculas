@@ -77,6 +77,14 @@ Tener instalado:
 
 ## Explicacion
 
+En el archivo `app.py` estan las rutas habilitadas
+
+Dentro del folder `services` tenemos los servicios para categorias, usuarios y peliculas.
+
+Dentro del folder `utils` estan 2 archivos comunes que se utilizan en el proyecto.
+
+### Colecciones
+
 En `user` tenemos los datos para que un usuario pueda hacer login.
 
 ```json
